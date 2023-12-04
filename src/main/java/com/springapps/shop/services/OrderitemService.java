@@ -1,5 +1,6 @@
 package com.springapps.shop.services;
 
+import com.springapps.shop.entities.Orderitem;
 import com.springapps.shop.repositories.OrderitemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,4 +15,8 @@ public class OrderitemService {
     public OrderitemService(OrderitemRepository orderitemRepository) {
         this.orderitemRepository = orderitemRepository;
     }
+
+
+
+
 }

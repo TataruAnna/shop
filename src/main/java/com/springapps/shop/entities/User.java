@@ -31,6 +31,14 @@ public class User {
     @JsonManagedReference("cartitem-user")
     private List<CartItem> cartItems;
 
+
+
+    @OneToMany(mappedBy = "user",  cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @JsonManagedReference("order-user")
+    private List<Order> orders;
+
+
+
     public User()
 
     {}
@@ -74,6 +82,14 @@ public class User {
 
     public void setWishlist(Whishlist wishlist) {
         this.wishlist = wishlist;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 
 

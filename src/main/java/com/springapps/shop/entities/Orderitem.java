@@ -10,6 +10,9 @@ public class Orderitem {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private Integer quantity;
+
     @ManyToOne
     @JoinColumn(name="product_id")
     @JsonBackReference("orderitem-product")
@@ -42,6 +45,13 @@ public class Orderitem {
         this.product = product;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
     public Order getOrder() {
         return order;
     }

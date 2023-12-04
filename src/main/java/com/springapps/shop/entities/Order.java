@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,8 +20,6 @@ public class Order {
     @JoinColumn(name = "user_id")
     @JsonBackReference("order-user")
     private User user;
-
-
 
     @OneToMany(mappedBy = "order",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     @JsonManagedReference("orderitem-order")

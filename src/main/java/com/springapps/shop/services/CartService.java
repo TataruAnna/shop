@@ -43,9 +43,11 @@ public class CartService {
     public CartItem addToCart(CartRequestDTO cartRequestDTO) {
         User user = userRepository.findById(cartRequestDTO.getUserId()).orElseThrow(()->new ResourceNotFoundException("user not found"));
         Product product = productRepository.findById(cartRequestDTO.getProductId()).orElseThrow(()->new ResourceNotFoundException("product not found"));
-        if (product.getStock()<cartRequestDTO.getQuantity()){
+        if (product.getStock()<cartRequestDTO.getQuantity()|| product.getStock()==null){
             throw  new ResourceNotFoundException("out of stock");
         }
+
+
 
         CartItem cartItem =cartItemMapper.mapCartRequestDTOtoCartItem(cartRequestDTO, product, user);
 //        CartItem cartItem = new CartItem();

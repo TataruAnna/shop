@@ -29,6 +29,11 @@ public class ProductService {
         productToBeSaved.setName(productRequestDTO.getName());
         productToBeSaved.setPrice(productRequestDTO.getPrice());
         productToBeSaved.setCategory(category);
+        if(productToBeSaved.getStock()==null){
+            productToBeSaved.setStock(1);
+        }else {
+            productToBeSaved.setStock(productToBeSaved.getStock() + 1);
+        }
         return productRepository.save(productToBeSaved);
     }
 
