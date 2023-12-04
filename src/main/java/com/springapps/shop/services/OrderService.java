@@ -9,6 +9,7 @@ import com.springapps.shop.entities.User;
 import com.springapps.shop.exceptions.ResourceNotFoundException;
 import com.springapps.shop.repositories.CartItemRepository;
 import com.springapps.shop.repositories.OrderRepository;
+import com.springapps.shop.repositories.OrderitemRepository;
 import com.springapps.shop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private OrderRepository orderRepository;
+
     private UserRepository userRepository;
 
     private CartItemRepository cartItemRepository;
@@ -33,6 +35,7 @@ public class OrderService {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.cartItemRepository = cartItemRepository;
+
     }
 
     public OrderItemResponseDTO mapFromCartitemDTOToOrderitemDTO(CartItemResponseDTO cartItem) {
@@ -46,11 +49,10 @@ public class OrderService {
 
     public Orderitem mapFromCartitemtoOrderitem(CartItem cartItem) {
         Orderitem orderitem = new Orderitem();
-//        orderitem.setUser(cartItem.getUser());
+
         orderitem.setId(cartItem.getId());
         orderitem.setQuantity(cartItem.getQuantity());
         orderitem.setProduct(cartItem.getProduct());
-
         return orderitem;
 
     }
@@ -59,20 +61,24 @@ public class OrderService {
     //
     //Endpoint: /orders/add/{userId}
     @Transactional
-    public User addOrderToUser(Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() -> new ResourceNotFoundException("user not found"));
+    public User addOrderToUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         Order order = new Order();
 
         List<Orderitem> orderitems = new ArrayList<>();
-        List<CartItem> cartItems = cartItemRepository.findAllByUser_Id((user_id));
+
+        List<CartItem> cartItems = cartItemRepository.findAllByUser_Id((userId));
+
+        order.setUser(user);
 
         orderitems = cartItems.stream()
                 .map(cartItem -> mapFromCartitemtoOrderitem(cartItem))
                 .collect(Collectors.toList());
 
         order.setOrderItems(orderitems);
-        order.setUser(user);
-        cartItemRepository.deleteAllById(Collections.singleton(user_id));
+        orderRepository.save(order);
+
+        cartItemRepository.deleteAllByUser_Id(userId);
         return userRepository.save(user);
     }
 

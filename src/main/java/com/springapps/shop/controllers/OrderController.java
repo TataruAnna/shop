@@ -25,7 +25,7 @@ public class OrderController {
     //Plasam o comanda pentru un utilizator (cu produsele pe care le are in cosul de cumparaturi)
     //
     //Endpoint: /orders/add/{userId}
-     @PostMapping("/{user_id}")
+     @PostMapping("/{userId}")
      public ResponseEntity<User> addOrderByUser(@PathVariable Long userId){
         return ResponseEntity.ok(orderService.addOrderToUser(userId));
 
