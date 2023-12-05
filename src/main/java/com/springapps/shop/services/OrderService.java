@@ -1,7 +1,9 @@
 package com.springapps.shop.services;
 
 import com.springapps.shop.dtos.CartItemResponseDTO;
+import com.springapps.shop.dtos.CartResponseDTO;
 import com.springapps.shop.dtos.OrderItemResponseDTO;
+import com.springapps.shop.dtos.OrderResponseDTO;
 import com.springapps.shop.entities.CartItem;
 import com.springapps.shop.entities.Order;
 import com.springapps.shop.entities.Orderitem;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,12 +50,22 @@ public class OrderService {
         return orderItemDTO;
     }
 
+    public Double computeTotalPrice(List<Orderitem> orderitems){
+        Optional<Double> totalPrice = orderitems.stream()
+                .map(orderitem -> orderitem.getQuantity() * orderitem.getPrice())
+                .reduce((sum, number)->sum+number);
+
+        return totalPrice.orElseThrow(()-> new ResourceNotFoundException("total price could not be computed"));
+
+    }
+
     public Orderitem mapFromCartitemtoOrderitem(CartItem cartItem) {
         Orderitem orderitem = new Orderitem();
 
-        orderitem.setId(cartItem.getId());
         orderitem.setQuantity(cartItem.getQuantity());
         orderitem.setProduct(cartItem.getProduct());
+        orderitem.setPrice(cartItem.getProduct().getPrice());
+
         return orderitem;
 
     }
@@ -62,24 +75,48 @@ public class OrderService {
     //Endpoint: /orders/add/{userId}
     @Transactional
     public User addOrderToUser(Long userId) {
+        //gasesc userul dupa id
+        //creez o noua comanda
+        //atasez comanda de utilizator
+        //gasesc cartitem-urile utilizatorului dupa id
+        //mut cartitem-urile in orderitem , sau le mapez
+        // atasez lista de orderitem la order
+        //salvez orderul
+        //sterg lista de cartitem-uri dupa id utilizator
+        //salvez user-ul
+
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         Order order = new Order();
 
+
         List<Orderitem> orderitems = new ArrayList<>();
-
         List<CartItem> cartItems = cartItemRepository.findAllByUser_Id((userId));
-
-        order.setUser(user);
-
         orderitems = cartItems.stream()
-                .map(cartItem -> mapFromCartitemtoOrderitem(cartItem))
+                .map(cartItem -> {Orderitem orderitem = mapFromCartitemtoOrderitem(cartItem);
+                    orderitem.setOrder(order);
+                    return orderitem;
+
+                })
                 .collect(Collectors.toList());
+        order.setTotalPrice(computeTotalPrice(orderitems));
 
         order.setOrderItems(orderitems);
+
+        user.getOrders().add(order);
+        order.setUser(user);
+
         orderRepository.save(order);
 
-        cartItemRepository.deleteAllByUser_Id(userId);
+       cartItemRepository.deleteAllByUser_Id(userId);
         return userRepository.save(user);
     }
+
+    @Transactional
+    public List<Order> viewOrders(Long userId){
+        List<Order> allOrders = orderRepository.findAllByUser_Id(userId);
+        return allOrders;
+    }
+
+
 
 }

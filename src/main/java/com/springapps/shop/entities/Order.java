@@ -14,7 +14,7 @@ public class Order {
     private Long id;
 
     @Column
-    private String orderNumber;
+    private Double totalPrice;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -28,8 +28,15 @@ public class Order {
     public Order() {
     }
 
-    public Order(String orderNumber, User user) {
-        this.orderNumber = orderNumber;
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Order(User user) {
         this.user = user;
     }
 
@@ -41,13 +48,6 @@ public class Order {
         this.id = id;
     }
 
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
 
     public User getUser() {
         return user;

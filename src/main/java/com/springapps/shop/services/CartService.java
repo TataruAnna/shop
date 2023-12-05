@@ -46,9 +46,6 @@ public class CartService {
         if (product.getStock()<cartRequestDTO.getQuantity()|| product.getStock()==null){
             throw  new ResourceNotFoundException("out of stock");
         }
-
-
-
         CartItem cartItem =cartItemMapper.mapCartRequestDTOtoCartItem(cartRequestDTO, product, user);
 //        CartItem cartItem = new CartItem();
 //        cartItem.setProduct(product);

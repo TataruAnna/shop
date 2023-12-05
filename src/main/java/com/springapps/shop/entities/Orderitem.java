@@ -13,6 +13,11 @@ public class Orderitem {
     @Column
     private Integer quantity;
 
+    @Column
+    private Double price;
+
+
+
     @ManyToOne
     @JoinColumn(name="product_id")
     @JsonBackReference("orderitem-product")
@@ -22,8 +27,6 @@ public class Orderitem {
     @JoinColumn(name="order_id")
     @JsonBackReference("orderitem-order")
     private Order order;
-
-
 
     public Orderitem() {
     }
@@ -56,7 +59,15 @@ public class Orderitem {
         return order;
     }
 
-    public void setUser(Order order) {
+    public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 }
