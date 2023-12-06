@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,19 @@ public class Order {
     @JsonManagedReference("orderitem-order")
     private List<Orderitem> orderItems;
 
+    @Column
+    private LocalDateTime createdAt;
+
     public Order() {
+    }
+
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public Double getTotalPrice() {

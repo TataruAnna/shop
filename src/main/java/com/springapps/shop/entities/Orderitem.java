@@ -17,7 +17,6 @@ public class Orderitem {
     private Double price;
 
 
-
     @ManyToOne
     @JoinColumn(name="product_id")
     @JsonBackReference("orderitem-product")

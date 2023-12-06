@@ -32,6 +32,10 @@ public class Product {
     @JsonManagedReference("cartitem-product")
     private List<CartItem> cartItems;
 
+    @OneToMany(mappedBy = "product",  cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    @JsonManagedReference("orderitem-product")
+    private List<Orderitem> orderitems;
+
     @Column
     private Integer stock;
 
@@ -41,6 +45,14 @@ public class Product {
     public Product(String name, Category category) {
         this.name = name;
         this.category = category;
+    }
+
+    public List<Orderitem> getOrderitems() {
+        return orderitems;
+    }
+
+    public void setOrderitems(List<Orderitem> orderitems) {
+        this.orderitems = orderitems;
     }
 
     public Integer getStock() {
