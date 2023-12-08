@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -38,11 +39,22 @@ public class User {
     private List<Order> orders;
 
 
+    @ManyToMany(mappedBy ="users")
+    private Set<Role> roles;
+
 
     public User()
 
     {}
 
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 
     public List<CartItem> getCartItems() {
         return cartItems;

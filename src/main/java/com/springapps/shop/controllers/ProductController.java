@@ -22,7 +22,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<Product> addProduct(@RequestBody ProductRequestDTO productRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.addProduct(productRequestDTO));
     }

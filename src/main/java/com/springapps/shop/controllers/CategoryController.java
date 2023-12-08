@@ -22,7 +22,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PostMapping
+    @PostMapping("/")
     //are rolul de a trimite date pentru a fi procesate catre o resursa specificata
     //datele sunt trimise in corpul solicitarii adica in cazul nostru in postman pun un order
     // prin body -> raw pun detaliile comenzii
@@ -31,7 +31,7 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newCategory);
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResponseEntity<List<Category>> findAll() {
         List<Category> productCategories = categoryService.findAll();
         return ResponseEntity.ok(productCategories);
