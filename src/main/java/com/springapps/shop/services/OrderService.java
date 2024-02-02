@@ -14,6 +14,7 @@ import com.springapps.shop.repositories.OrderRepository;
 import com.springapps.shop.repositories.OrderitemRepository;
 import com.springapps.shop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,7 +74,7 @@ public class OrderService {
     //
     //Endpoint: /orders/add/{userId}
     @Transactional
-    public Order addOrderToUser(Long userId) {
+    public Order addOrderToUser() {
         //gasesc userul dupa id
         //creez o noua comanda
         //atasez comanda de utilizator
@@ -84,10 +85,11 @@ public class OrderService {
         //sterg lista de cartitem-uri dupa id utilizator
         //salvez user-ul
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found"));
+        String loggedInUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findUserByUsername(loggedInUserName).orElseThrow(() -> new ResourceNotFoundException("user not found"));
         Order order = new Order();
 
-        List<CartItem> cartItems = cartItemRepository.findAllByUser_Id(userId);
+        List<CartItem> cartItems = cartItemRepository.findAllByUser_Id(user.getId());
         if (cartItems.size()==0){
             throw new ResourceNotFoundException("order cannot be placed. Cart is empty");
         }
@@ -98,7 +100,7 @@ public class OrderService {
         order.setOrderItems(orderitems);
         order.setUser(user);
         order.setCreatedAt(LocalDateTime.now());
-        cartItemRepository.deleteAllByUser_Id(userId);
+        cartItemRepository.deleteAllByUser_Id(user.getId());
         return orderRepository.save(order);
     }
 

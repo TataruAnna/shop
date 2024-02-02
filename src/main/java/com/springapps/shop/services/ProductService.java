@@ -37,5 +37,9 @@ public class ProductService {
         return productRepository.save(productToBeSaved);
     }
 
+    public Product findById(Long id){
+          return productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("product not found"));
+    }
+
 
 }

@@ -15,6 +15,8 @@ public abstract class CartItemMapper {
 
     public abstract CartItem mapCartRequestDTOtoCartItem(CartRequestDTO cartRequestDTO, Product product, User user);
 
+    //cand vrem sa mapam de la un obiect la un dto, trebuie sa punem adnotarile prin care ii spunem
+    // de la ce proprietate a obiectului mapam catre ce proprietate a dto-ului
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "product.name", target = "productName")
     @Mapping(source = "product.price", target = "price")

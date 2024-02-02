@@ -3,6 +3,7 @@ package com.springapps.shop.controllers;
 import com.springapps.shop.dtos.CartRequestDTO;
 import com.springapps.shop.dtos.CartResponseDTO;
 import com.springapps.shop.entities.CartItem;
+import com.springapps.shop.exceptions.ResourceNotFoundException;
 import com.springapps.shop.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ public class CartController {
     @PostMapping
     public ResponseEntity<CartItem> addToCart(@RequestBody CartRequestDTO cartRequestDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(cartService.addToCart(cartRequestDTO));
+
     }
 
     @GetMapping("/{userId}")
