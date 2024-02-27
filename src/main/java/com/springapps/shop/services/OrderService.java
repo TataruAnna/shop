@@ -93,15 +93,20 @@ public class OrderService {
         if (cartItems.size()==0){
             throw new ResourceNotFoundException("order cannot be placed. Cart is empty");
         }
-        List<Orderitem> orderitems = cartItems.stream()
-                .map(cartItem -> mapFromCartitemtoOrderitem(cartItem,order))
-                .collect(Collectors.toList());
+        List<Orderitem> orderitems = getOrderitems(order, cartItems);
         order.setTotalPrice(computeTotalPrice(orderitems));
         order.setOrderItems(orderitems);
         order.setUser(user);
         order.setCreatedAt(LocalDateTime.now());
         cartItemRepository.deleteAllByUser_Id(user.getId());
         return orderRepository.save(order);
+    }
+
+    public List<Orderitem> getOrderitems(Order order, List<CartItem> cartItems) {
+        List<Orderitem> orderitems = cartItems.stream()
+                .map(cartItem -> mapFromCartitemtoOrderitem(cartItem, order))
+                .collect(Collectors.toList());
+        return orderitems;
     }
 
     @Transactional
