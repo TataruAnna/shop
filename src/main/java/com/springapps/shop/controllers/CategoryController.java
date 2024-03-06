@@ -2,6 +2,12 @@ package com.springapps.shop.controllers;
 
 import com.springapps.shop.entities.Category;
 import com.springapps.shop.services.CategoryService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/category")
+@Tag(name = "Category", description = "Category management APIs")
 //este clasa in care voi face cererile
 // dinspre server si catre server prin intermediul url -ului
 public class CategoryController {
@@ -32,6 +39,10 @@ public class CategoryController {
     }
 
     @GetMapping("/")
+    @Operation(
+            summary = "Retrieve all categories",
+            description = "Get a Tutorial object by specifying its id. The response is Tutorial object with id, title, description and published status.",
+            tags = { "tutorials", "get" })
     public ResponseEntity<List<Category>> findAll() {
         List<Category> productCategories = categoryService.findAll();
         return ResponseEntity.ok(productCategories);

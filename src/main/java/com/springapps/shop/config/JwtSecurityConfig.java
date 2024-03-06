@@ -5,6 +5,7 @@ import com.springapps.shop.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
@@ -18,6 +19,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+
+
 public class JwtSecurityConfig {
 
     private static final String[] AUTH_WHITELIST = {
@@ -55,8 +58,7 @@ public class JwtSecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/category/**").permitAll()
-                                .requestMatchers(AUTH_WHITELIST).permitAll()
+                        auth.requestMatchers(AUTH_WHITELIST).permitAll()
                                 .requestMatchers("/authenticate").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/product/**").hasRole("ADMIN")
                                 .anyRequest().authenticated())
